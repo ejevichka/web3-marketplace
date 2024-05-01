@@ -1,5 +1,6 @@
 import Head from "next/head";
-import Grid from "~/components/cardGrid"
+import Grid from "~/components/cardGrid";
+import { useConnectionContext } from "~/contexts/connection";
 
 import { api } from "~/utils/api";
 
@@ -9,7 +10,8 @@ export default function Home() {
     id: "12345",
     name: "CryptoKitty #12345",
     image: "/", // Replace with a placeholder image URL or an actual IPFS hash
-    description: "This is a unique and adorable CryptoKitty with a rare fur pattern. It is part of a limited edition collection.",
+    description:
+      "This is a unique and adorable CryptoKitty with a rare fur pattern. It is part of a limited edition collection.",
     owner: "0x1234567890AbCdEf1234567890AbCdEf1234",
     attributes: [
       { trait_type: "Fur Pattern", value: "Striped" },
@@ -34,7 +36,8 @@ export default function Home() {
             Pet Nat
           </h1>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Grid />
+            {/* <Grid /> */}
+            <MyComponent />
           </div>
           <p className="text-2xl text-white">
             {hello.data ? hello.data.greeting : "Loading tRPC query..."}
@@ -43,4 +46,23 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+function MyComponent() {
+  const context = useConnectionContext();
+  if (context.type === "disconnected") {
+    return <button onClick={context.connect}>Connect</button>;
+  }
+
+  if (context.type === "connected") {
+    return (
+      <ul>
+        {context.wallet.accounts.map((y) => (
+          <li key={y}>{y}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  return null;
 }
