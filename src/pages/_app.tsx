@@ -5,6 +5,7 @@ import Layout from "./layout";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
+import { ConnectionProvider } from "~/contexts/connection";
 
 const inter = Chakra_Petch({
   weight: "300",
@@ -13,11 +14,13 @@ const inter = Chakra_Petch({
 });
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <main className={`font-sans ${inter.variable}`}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </main>
+    <ConnectionProvider>
+      <main className={`font-sans ${inter.variable}`}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </main>
+    </ConnectionProvider>
   );
 };
 
