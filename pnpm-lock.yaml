@@ -11,6 +11,9 @@ importers:
       '@metamask/detect-provider':
         specifier: 2.0.0
         version: 2.0.0
+      '@metamask/utils':
+        specifier: ^8.4.0
+        version: 8.4.0
       '@prisma/client':
         specifier: ^5.10.2
         version: 5.12.1(prisma@5.12.1)
@@ -50,9 +53,6 @@ importers:
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
-      typebox:
-        specifier: ^0.0.1
-        version: 0.0.1
       viem:
         specifier: ^2.9.29
         version: 2.9.29(typescript@5.4.5)(zod@3.22.4)
@@ -60,9 +60,6 @@ importers:
         specifier: 3.22.4
         version: 3.22.4
     devDependencies:
-      '@metamask/utils':
-        specifier: ^8.4.0
-        version: 8.4.0
       '@types/eslint':
         specifier: ^8.56.2
         version: 8.56.10
@@ -1832,9 +1829,6 @@ packages:
   type-fest@0.20.2:
     resolution: {integrity: sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==}
     engines: {node: '>=10'}
-
-  typebox@0.0.1:
-    resolution: {integrity: sha512-pJc2iszaWtRS4mIX73nT2IvgtTTuW0yu3unrbMcszsNxzypSpMiTmt7Cr/2t59amfI0naGEE6jvSWeqMFynL+g==}
 
   typed-array-buffer@1.0.2:
     resolution: {integrity: sha512-gEymJYKZtKXzzBzM4jqa9w6Q1Jjm7x2d+sh19AdsD4wqnMPDYyvwpsIc2Q/835kHuo3BEQ7CjelGhfTsoBb2MQ==}
@@ -3864,8 +3858,6 @@ snapshots:
       prelude-ls: 1.2.1
 
   type-fest@0.20.2: {}
-
-  typebox@0.0.1: {}
 
   typed-array-buffer@1.0.2:
     dependencies:
