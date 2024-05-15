@@ -2,36 +2,36 @@ import { useState, useEffect, useMemo } from "react";
 import type { EIP1193Provider } from "viem";
 import detectEthereumProvider from "@metamask/detect-provider";
 import {
-  toWalletAddresss,
   type WalletAddress,
 } from "~/domains/blockchain/types";
+import { connect }  from "~/utils/connect";
 
 type Provider = {
   provider: EIP1193Provider;
-  connect: () => Promise<void>;
+  connect: Promise<void>;
 };
 
 type Wallet = {
   accounts: WalletAddress[];
+  balance: bigint;
 };
 
 type Connection =
   | {
-      type: "disconnected";
-      provider: Provider | null;
-    }
+    type: "disconnected";
+    provider: Provider | null;
+  }
   | {
-      type: "connected";
-      wallet: Wallet;
-      provider: Provider;
-    };
+    type: "connected";
+    wallet: Wallet;
+    provider: Provider;
+  };
 
 export function useWalletProvider(): Connection {
   const [provider, setProvider] = useState<Provider | null>(null);
   const [wallet, setWallet] = useState<Wallet | null>(null);
   const [hasError, setHasError] = useState<unknown>(null);
-  // const initialState = { accounts: [] };              /* New */
-  // const [wallet, setWallet] = useState(initialState); /* New */
+
 
   useEffect(() => {
     detectEthereumProvider({ silent: true })
@@ -39,15 +39,10 @@ export function useWalletProvider(): Connection {
         const eip1193 = toEIP1193Provider(x);
         setProvider({
           provider: eip1193,
-          connect: () =>
-            eip1193
-              .request({ method: "eth_requestAccounts" })
-              .then((accounts) => {
-                setWallet({ accounts: accounts.map(toWalletAddresss) });
-              }),
+          connect: connect(eip1193, setWallet, setHasError)
         });
       })
-      .catch((err) => setHasError(err));
+      .catch((err) => setHasError(err.message));
   }, []);
 
   return useMemo(() => {

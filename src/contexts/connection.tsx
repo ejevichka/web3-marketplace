@@ -4,16 +4,20 @@ import React, {
   useState,
   useMemo,
   useContext,
+  useCallback
 } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
-import type { EIP1193Provider } from "viem";
+import {type EIP1193Provider, formatEther } from "viem";
+import { publicClient } from '~/utils/client'
 import {
   toWalletAddresss,
   type WalletAddress,
 } from "~/domains/blockchain/types";
+import { connect }  from "~/utils/connect";
 
 export type Wallet = {
   accounts: WalletAddress[];
+  balance: bigint;
 };
 
 export type Connection =
@@ -22,7 +26,7 @@ export type Connection =
     }
   | {
       type: "disconnected";
-      connect: () => Promise<void>;
+      connect: Promise<void>;
     }
   | {
       type: "connected";
@@ -52,6 +56,18 @@ export function ConnectionProvider(props: ConnectionProviderProps) {
       .catch((err) => setHasError(err));
   }, []);
 
+  const connectWallet = useCallback(async () => {
+    if (!provider) return;
+    try {
+      const accounts = await provider.request({ method: "eth_requestAccounts" });
+      const balance = await publicClient.getBalance({ address: toWalletAddresss(accounts[0]) });
+      console.log('balance', balance)
+      setWallet({ balance, accounts: accounts.map(toWalletAddresss)});
+    } catch (error) {
+      console.error("Error fetching balance:", error);
+    }
+  }, [provider]);
+
   const connection: Connection = useMemo(() => {
     if (!provider) {
       return {
@@ -67,12 +83,9 @@ export function ConnectionProvider(props: ConnectionProviderProps) {
     }
     return {
       type: "disconnected",
-      connect: () =>
-        provider.request({ method: "eth_requestAccounts" }).then((accounts) => {
-          setWallet({ accounts: accounts.map(toWalletAddresss) });
-        }),
+      connect: connectWallet,
     };
-  }, [provider, wallet]);
+  }, [provider, wallet, connectWallet]);
 
   return <connectionContext.Provider value={connection} {...props} />;
 }
