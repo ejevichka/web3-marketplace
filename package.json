@@ -10,8 +10,7 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start",
-    "bootstrap": "corepack pnpm install"
+    "start": "next start"
   },
   "dependencies": {
     "@metamask/detect-provider": "2.0.0",

@@ -1,15 +1,15 @@
 # Development
 
-1. Install dependencies via `corepack`
+1. Install dependencies via pnpm
 
 ```
-npm run bootstrap
+pnpm install
 ```
 
 2. Run the dev server
 
 ```
-npm run dev
+pnpm run dev
 ```
 
 3. Edit files to preview the changes with hot reload
